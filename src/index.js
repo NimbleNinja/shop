@@ -1,23 +1,41 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './app/store';
+import { store } from './store';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import './index.css';
+import './index.scss';
+import { client } from './client';
+import { gql } from '@apollo/client';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
-);
+//client
+//  .query({
+//    query: gql`
+//      query {
+//        categories {
+//          name
+//          products {
+//            id
+//            name
+//            category
+//            prices {
+//              currency {
+//                label
+//                symbol
+//              }
+//              amount
+//            }
+//          }
+//        }
+//      }
+//    `,
+//  })
+//  .then(result => console.log(result.data.categories));
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+);

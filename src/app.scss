@@ -1,0 +1,91 @@
+.app {
+  min-height: 100vh;
+}
+
+.header {
+  &__content {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    width: 41px;
+    height: 41px;
+    margin-top: 24px;
+  }
+
+  &__categories {
+    display: flex;
+    list-style: none;
+
+    &-item {
+      padding: 28px 16px 30px 16px;
+      border-bottom: 2px solid transparent;
+      line-height: 20px;
+      font-weight: 400;
+      text-transform: uppercase;
+
+      &:hover {
+        border-color: #5ece7b;
+        font-weight: 600;
+        color: #5ece7b;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    margin-top: 28.5px;
+  }
+}
+
+.actions {
+  &__currency-switcher {
+    position: relative;
+    margin-right: 38px;
+
+    &-symbol {
+      font-size: 18px;
+      line-height: 29px;
+      font-weight: 500;
+      color: #1d1f22;
+    }
+
+    &::after {
+      display: block;
+      width: 8px;
+      height: 4px;
+      position: absolute;
+      left: 22px;
+      top: 15.5px;
+      content: '';
+      background: url('./images/arrow.svg');
+    }
+  }
+
+  &__cart {
+    position: relative;
+    padding-top: 5.5px;
+
+    &-icon {
+      display: inline-block;
+      width: 20px;
+      height: 18px;
+    }
+
+    &-counter {
+      position: absolute;
+      top: -3.5px;
+      left: 13px;
+      width: 20px;
+      height: 20px;
+      background: #000;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 14px;
+      line-height: 19px;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+}
