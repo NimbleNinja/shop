@@ -1,19 +1,45 @@
 import React, { Component } from 'react';
-import './app.scss';
+import { connect } from 'react-redux';
+import { Link, Route, Routes } from 'react-router-dom';
+import { cartLengthSelector } from './features/cart/cart.selectors';
+import {
+  categoriesNamesSelector,
+  currentCategorySelector,
+} from './features/categories/shop.selectors';
+import { getCategories, getProductsByCategory, setCategory } from './features/categories/shopSlice';
 import cartIcon from './images/cart.svg';
 import logo from './images/logo.svg';
+import ProductDescription from './pages/ProductDescription/ProductDescription';
 import ProductList from './pages/ProductList/ProductList';
+import './styles/app.scss';
 
 class App extends Component {
+  componentDidMount() {
+    this.props.getCategories();
+  }
+
   render() {
+    const { categoriesNames, category, changeCategory, cartLength, getProductsByCategory } =
+      this.props;
     return (
       <div className="app">
         <header className="header">
           <div className="header__content container">
             <ul className="header__categories">
-              <li className="header__categories-item">Women</li>
-              <li className="header__categories-item">Men</li>
-              <li className="header__categories-item">Kids</li>
+              {categoriesNames.map(name => {
+                return (
+                  <Link key={name} to={`${name}`}>
+                    <li
+                      onClick={() => getProductsByCategory(name)}
+                      className={`header__categories-item ${
+                        category === name ? 'header__categories-item_active' : ''
+                      }`}
+                    >
+                      {name}
+                    </li>
+                  </Link>
+                );
+              })}
             </ul>
             <img className="header__logo" src={logo} alt="logo" />
             <div className="header__actions actions">
@@ -22,19 +48,40 @@ class App extends Component {
               </div>
               <div className="actions__cart">
                 <img src={cartIcon} alt="cart" className="actions__cart-icon" />
-                <div className="actions__cart-counter">0</div>
+                <div className="actions__cart-counter">{cartLength}</div>
               </div>
             </div>
           </div>
         </header>
-        <div className="content">
+        <main className="content">
           <div className="container">
-            <ProductList />
+            <Routes>
+              <Route path="/" element={<ProductList />} />
+              <Route path=":categoryName" element={<ProductList />} />
+              <Route path=":categoryName/:productId" element={<ProductDescription />} />
+
+              {/*<Route path="cart" element={<p>Cart</p>} />*/}
+            </Routes>
           </div>
-        </div>
+        </main>
       </div>
     );
   }
 }
 
-export default App;
+const mapState = state => {
+  return {
+    categories: state.categories.categoriesList,
+    categoriesNames: categoriesNamesSelector(state),
+    category: currentCategorySelector(state),
+    cartLength: cartLengthSelector(state),
+  };
+};
+
+const mapDispatch = {
+  getCategories,
+  changeCategory: setCategory,
+  getProductsByCategory,
+};
+
+export default connect(mapState, mapDispatch)(App);
