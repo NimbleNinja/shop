@@ -1,29 +1,35 @@
 import React, { Component } from 'react';
 import './product-list.scss';
-import cartIcon from '../../images/cart-white.svg';
-import { Link } from 'react-router-dom';
+import { withParams } from '../../hocs/withParams';
+import { withNavigate } from '../../hocs/withNavigate';
 
 class ProductItem extends Component {
+  clickHandler = (e, path) => {
+    if (e.target.type !== 'submit') {
+      this.props.navigate(path);
+    }
+  };
+
   render() {
-    //product_out-of-stock
-    const { name, price, imgSrc, addProduct, id } = this.props;
+    const { price, currentCategory, addProduct, product } = this.props;
+    const { id, inStock, gallery, name } = product;
+    const { categoryName } = this.props.params;
+    const path = categoryName ? id : `${currentCategory}/${id}`;
+
+    const classes = `products__item product ${inStock ? '' : 'product_out-of-stock'}`;
     return (
-      <li className="products__item product">
-        <Link to={id}>
-          <div className="product__card">
-            <div className="product__img">
-              <img src={imgSrc} alt="product" />
-            </div>
-            <div className="product__name">{name}</div>
-            <div className="product__price">{`${price.currency.symbol}${price.amount}`}</div>
-            <button onClick={() => addProduct(id)} className="product__cart-btn">
-              <img className="product__cart-btn-icon" src={cartIcon} alt="cart icon" />
-            </button>
+      <li className={classes}>
+        <div onClick={e => this.clickHandler(e, path)} className="product__card">
+          <div className="product__img">
+            <img src={gallery[0]} alt="product" />
           </div>
-        </Link>
+          <div className="product__name">{name}</div>
+          <div className="product__price">{`${price.currency.symbol}${price.amount}`}</div>
+          <button onClick={() => addProduct(product)} className="product__cart-btn" />
+        </div>
       </li>
     );
   }
 }
 
-export default ProductItem;
+export default withParams(withNavigate(ProductItem));

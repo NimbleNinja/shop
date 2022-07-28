@@ -1,38 +1,64 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Route, Routes } from 'react-router-dom';
-import { cartLengthSelector } from './features/cart/cart.selectors';
-import {
-  categoriesNamesSelector,
-  currentCategorySelector,
-} from './features/categories/shop.selectors';
-import { getCategories, getProductsByCategory, setCategory } from './features/categories/shopSlice';
-import cartIcon from './images/cart.svg';
-import logo from './images/logo.svg';
 import ProductDescription from './pages/ProductDescription/ProductDescription';
 import ProductList from './pages/ProductList/ProductList';
+
+import { cartItemsSelector, cartQuantitySelector } from './features/cart/cart.selectors';
+import {
+  categoriesSelector,
+  currenciesListSelector,
+  currencyModalStatusSelector,
+  currentCategorySelector,
+  generalCurrencySelector,
+} from './features/shop/shop.selectors';
+import {
+  getCategories,
+  getProductsByCategory,
+  changeCurrency,
+  toggleCurrencyModalStatus,
+} from './features/shop/shopSlice';
+
+import cartIcon from './images/cart.svg';
+import logo from './images/logo.svg';
+
 import './styles/app.scss';
+import Cart from './pages/Cart/Cart';
 
 class App extends Component {
   componentDidMount() {
     this.props.getCategories();
   }
 
+  switchCurrency = (e, currency) => {
+    e.stopPropagation();
+    this.props.changeCurrency(currency);
+  };
+
   render() {
-    const { categoriesNames, category, changeCategory, cartLength, getProductsByCategory } =
-      this.props;
+    const {
+      categories,
+      currentCategory,
+      currency,
+      currencies,
+      cartQuantity,
+      getProductsByCategory,
+      currencyModalStatus,
+      toggleCurrencyModalStatus,
+    } = this.props;
+
     return (
       <div className="app">
         <header className="header">
           <div className="header__content container">
             <ul className="header__categories">
-              {categoriesNames.map(name => {
+              {categories.map(name => {
                 return (
-                  <Link key={name} to={`${name}`}>
+                  <Link key={name} to={`./${name}`}>
                     <li
                       onClick={() => getProductsByCategory(name)}
                       className={`header__categories-item ${
-                        category === name ? 'header__categories-item_active' : ''
+                        currentCategory === name ? 'header__categories-item_active' : ''
                       }`}
                     >
                       {name}
@@ -43,13 +69,31 @@ class App extends Component {
             </ul>
             <img className="header__logo" src={logo} alt="logo" />
             <div className="header__actions actions">
-              <div className="actions__currency-switcher">
-                <div className="actions__currency-switcher-symbol">$</div>
+              <div
+                className="actions__currency-switcher currency-switcher"
+                onClick={() => toggleCurrencyModalStatus()}
+              >
+                <div className="currency-switcher__symbol">{currency.symbol}</div>
+                {currencyModalStatus ? (
+                  <div className="currency-switcher__modal">
+                    {currencies.map(currency => {
+                      return (
+                        <div
+                          onClick={e => this.switchCurrency(e, currency)}
+                          key={currency.label}
+                          className="currency-switcher__item"
+                        >{`${currency.symbol} ${currency.label}`}</div>
+                      );
+                    })}
+                  </div>
+                ) : null}
               </div>
-              <div className="actions__cart">
-                <img src={cartIcon} alt="cart" className="actions__cart-icon" />
-                <div className="actions__cart-counter">{cartLength}</div>
-              </div>
+              <Link to="./cart">
+                <div className="actions__cart">
+                  <img src={cartIcon} alt="cart" className="actions__cart-icon" />
+                  <div className="actions__cart-counter">{cartQuantity}</div>
+                </div>
+              </Link>
             </div>
           </div>
         </header>
@@ -59,8 +103,7 @@ class App extends Component {
               <Route path="/" element={<ProductList />} />
               <Route path=":categoryName" element={<ProductList />} />
               <Route path=":categoryName/:productId" element={<ProductDescription />} />
-
-              {/*<Route path="cart" element={<p>Cart</p>} />*/}
+              <Route path="cart" element={<Cart />} />
             </Routes>
           </div>
         </main>
@@ -71,17 +114,20 @@ class App extends Component {
 
 const mapState = state => {
   return {
-    categories: state.categories.categoriesList,
-    categoriesNames: categoriesNamesSelector(state),
-    category: currentCategorySelector(state),
-    cartLength: cartLengthSelector(state),
+    categories: categoriesSelector(state),
+    currencies: currenciesListSelector(state),
+    currentCategory: currentCategorySelector(state),
+    cartQuantity: cartQuantitySelector(state),
+    currency: generalCurrencySelector(state),
+    currencyModalStatus: currencyModalStatusSelector(state),
   };
 };
 
 const mapDispatch = {
   getCategories,
-  changeCategory: setCategory,
   getProductsByCategory,
+  changeCurrency,
+  toggleCurrencyModalStatus,
 };
 
 export default connect(mapState, mapDispatch)(App);

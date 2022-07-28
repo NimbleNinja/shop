@@ -2,40 +2,43 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addProduct } from '../../features/cart/cartSlice';
 import {
-  categoryNameSelector,
+  currentCategorySelector,
   categoryProductsSelector,
   generalCurrencySelector,
-} from '../../features/categories/shop.selectors';
-import { getProductsByCategory } from '../../features/categories/shopSlice';
-import { withParams } from '../../hocs/ComponentWithParams';
+} from '../../features/shop/shop.selectors';
+import { getProductsByCategory } from '../../features/shop/shopSlice';
+import { withParams } from '../../hocs/withParams';
 import ProductItem from './ProductItem';
 
 class ProductList extends Component {
   componentDidMount() {
-    const { categoryName } = this.props.params;
-    this.props.getProductsByCategory(categoryName || 'all');
+    const { currentCategory } = this.props.params;
+    this.props.getProductsByCategory(currentCategory || 'all');
   }
 
   render() {
-    const { categoryName, addProduct, products, currentCurrency } = this.props;
+    const { currentCategory, addProduct, products, currentCurrency } = this.props;
 
     return (
       <section className="products">
-        <h2 className="products__title">{categoryName}</h2>
+        <h2 className="products__title">{currentCategory}</h2>
         <ul className="products__list">
-          {products.map(({ id, name, prices, gallery }) => {
-            const price = prices.find(({ currency }) => {
-              return currency.label === currentCurrency;
+          {products.map(product => {
+            const price = product.prices.find(({ currency }) => {
+              return currency.label === currentCurrency.label;
             });
 
             return (
               <ProductItem
-                key={id}
-                id={id}
-                name={name}
+                currentCategory={currentCategory}
+                key={product.id}
+                product={product}
                 price={price}
-                imgSrc={gallery[0]}
                 addProduct={addProduct}
+                //id={id}
+                //name={name}
+                //inStock={inStock}
+                //imgSrc={gallery[0]}
               />
             );
           })}
@@ -47,8 +50,7 @@ class ProductList extends Component {
 
 const mapState = state => {
   return {
-    currentCategory: state.categories.currentCategory,
-    categoryName: categoryNameSelector(state),
+    currentCategory: currentCategorySelector(state),
     products: categoryProductsSelector(state),
     currentCurrency: generalCurrencySelector(state),
   };

@@ -1,9 +1,13 @@
-export const categoriesNamesSelector = state => {
+export const categoriesSelector = state => {
   return state.categories.categoriesList;
 };
 
-export const categoryNameSelector = state => {
-  return state.categories.currentCategory;
+export const currenciesListSelector = state => {
+  return state.categories.currenciesList;
+};
+
+export const currencyModalStatusSelector = state => {
+  return state.categories.currencyModalStatus;
 };
 
 export const categoryProductsSelector = state => {

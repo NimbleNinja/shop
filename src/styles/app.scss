@@ -2,11 +2,6 @@
   min-height: 100vh;
 }
 
-a {
-  text-decoration: none;
-  color: #000;
-}
-
 .header {
   &__content {
     display: flex;
@@ -39,33 +34,16 @@ a {
   }
 
   &__actions {
-    display: flex;
     margin-top: 28.5px;
   }
 }
 
 .actions {
+  display: flex;
+  align-self: flex-start;
+
   &__currency-switcher {
-    position: relative;
     margin-right: 38px;
-
-    &-symbol {
-      font-size: 18px;
-      line-height: 29px;
-      font-weight: 500;
-      color: #1d1f22;
-    }
-
-    &::after {
-      display: block;
-      width: 8px;
-      height: 4px;
-      position: absolute;
-      left: 22px;
-      top: 15.5px;
-      content: '';
-      background: url('../images/arrow.svg');
-    }
   }
 
   &__cart {
@@ -91,6 +69,59 @@ a {
       line-height: 19px;
       font-weight: 700;
       text-align: center;
+    }
+  }
+}
+
+.currency-switcher {
+  position: relative;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 29px;
+  align-self: start;
+
+  &::after {
+    display: block;
+    width: 8px;
+    height: 4px;
+    position: absolute;
+    left: 22px;
+    top: 15.5px;
+    content: '';
+    background: url('../images/arrow.svg');
+  }
+
+  &__symbol {
+    font-size: 18px;
+    line-height: 29px;
+    font-weight: 500;
+    color: #1d1f22;
+  }
+
+  &__modal {
+    position: absolute;
+    top: 36.5px;
+    left: -21px;
+    display: inline-block;
+    background: #ffffff;
+    width: 114px;
+    padding: 12px 0px 12px 0px;
+    box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
+  }
+
+  &__item {
+    margin-bottom: 4px;
+    padding-left: 20px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 45px;
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
+
+    &:nth-child(even) {
+      background-color: #eeeeee;
     }
   }
 }

@@ -1,15 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchProductsByCategory, initFetch } from './shop.gateway';
 
-const initialState = {
-  isLoading: false,
-  currency: 'USD',
-  currentCategory: '',
-  categoryProducts: [],
-  categoriesList: [],
-  currenciesList: [],
-};
-
 export const getCategories = createAsyncThunk('categories/getCategories', async () => {
   const response = await initFetch();
   return response;
@@ -23,15 +14,29 @@ export const getProductsByCategory = createAsyncThunk(
   },
 );
 
+const initialState = {
+  isLoading: false,
+  currency: {
+    label: 'USD',
+    symbol: '$',
+  },
+  currencyModalStatus: false,
+  currentCategory: '',
+  categoryProducts: [],
+  categoriesList: [],
+  currenciesList: [],
+};
+
 const shopSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    setCategory: (state, action) => {
-      state.currentCategory = action.payload;
-    },
     changeCurrency: (state, action) => {
       state.currency = action.payload;
+      state.currencyModalStatus = false;
+    },
+    toggleCurrencyModalStatus: state => {
+      state.currencyModalStatus = !state.currencyModalStatus;
     },
   },
   extraReducers: builder => {
@@ -41,6 +46,7 @@ const shopSlice = createSlice({
         state.categoriesList = categories.map(category => category.name);
         state.currentCategory = categories[0].name;
         state.currenciesList = currencies;
+        state.currency = currencies[0];
       })
       .addCase(getProductsByCategory.fulfilled, (state, action) => {
         state.categoryProducts = action.payload.data.category.products;
@@ -49,6 +55,6 @@ const shopSlice = createSlice({
   },
 });
 
-export const { setCategory } = shopSlice.actions;
+export const { changeCurrency, toggleCurrencyModalStatus } = shopSlice.actions;
 
 export default shopSlice.reducer;

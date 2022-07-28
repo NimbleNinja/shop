@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchProductById } from '../product/product.gateway';
 
+export const getProductById = createAsyncThunk('cart/getProductById', async id => {
+  const response = await fetchProductById(id);
+  return response;
+});
+
 const initialState = {
   currentProduct: {
     gallery: [],
@@ -10,11 +15,6 @@ const initialState = {
   mainPhotoSrc: '',
 };
 
-export const getProductById = createAsyncThunk('cart/getProductById', async id => {
-  const response = await fetchProductById(id);
-  return response;
-});
-
 const productSlice = createSlice({
   name: 'product',
   initialState,
@@ -23,11 +23,21 @@ const productSlice = createSlice({
       state.mainPhotoSrc = action.payload;
     },
     changeActiveAttribute: (state, action) => {
-      const attribute = state.currentProduct.attributes.find(attr => {
-        return attr.id === action.payload.id;
+      const { productId, attributeId, attributeValue } = action.payload;
+
+      const product = productId
+        ? state.items.find(item => {
+            return item.id === productId;
+          })
+        : state.currentProduct;
+
+      const attribute = product.attributes.find(attr => {
+        return attr.id === attributeId;
       });
 
-      attribute.active = action.payload.value;
+      if (attribute) {
+        attribute.active = attributeValue;
+      }
     },
   },
   extraReducers: builder => {

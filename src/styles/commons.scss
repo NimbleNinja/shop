@@ -6,4 +6,9 @@
   font-size: 16px;
   line-height: 52px;
   color: #ffffff;
+  cursor: pointer;
+
+  &:disabled {
+    background: grey;
+  }
 }
