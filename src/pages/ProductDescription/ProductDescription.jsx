@@ -23,7 +23,7 @@ class ProductDescription extends Component {
   }
 
   render() {
-    const { id, name, inStock, brand, gallery, description, attributes, prices } =
+    const { name, inStock, brand, gallery, description, attributes, prices } =
       this.props.currentProduct;
 
     const { currentCurency, mainPhotoSrc, changeMainPhoto, changeActiveAttribute, addProduct } =

@@ -34,7 +34,6 @@ class CartOverlay extends Component {
     } = this.props;
 
     const { symbol } = currentCurrency;
-    const tax = (total * 0.21).toFixed(2);
     const totalPrice = (total * 0.21 + total).toFixed(2);
 
     return (
