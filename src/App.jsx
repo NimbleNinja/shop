@@ -4,7 +4,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import ProductDescription from './pages/ProductDescription/ProductDescription';
 import ProductList from './pages/ProductList/ProductList';
 
-import { cartItemsSelector, cartQuantitySelector } from './features/cart/cart.selectors';
+import { cartQuantitySelector, overlayStatusSelector } from './features/cart/cart.selectors';
 import {
   categoriesSelector,
   currenciesListSelector,
@@ -24,6 +24,8 @@ import logo from './images/logo.svg';
 
 import './styles/app.scss';
 import Cart from './pages/Cart/Cart';
+import CartOverlay from './pages/Cart/CartOverlay';
+import { toggleCartOverlayStatus } from './features/cart/cartSlice';
 
 class App extends Component {
   componentDidMount() {
@@ -45,6 +47,8 @@ class App extends Component {
       getProductsByCategory,
       currencyModalStatus,
       toggleCurrencyModalStatus,
+      overlayStatus,
+      toggleCartOverlayStatus,
     } = this.props;
 
     return (
@@ -88,16 +92,17 @@ class App extends Component {
                   </div>
                 ) : null}
               </div>
-              <Link to="./cart">
-                <div className="actions__cart">
-                  <img src={cartIcon} alt="cart" className="actions__cart-icon" />
-                  <div className="actions__cart-counter">{cartQuantity}</div>
-                </div>
-              </Link>
+              {/*<Link to="./cart">*/}
+              <div className="actions__cart" onClick={() => toggleCartOverlayStatus()}>
+                <img src={cartIcon} alt="cart" className="actions__cart-icon" />
+                <div className="actions__cart-counter">{cartQuantity}</div>
+              </div>
+              {/*</Link>*/}
             </div>
           </div>
         </header>
         <main className="content">
+          {overlayStatus ? <CartOverlay /> : null}
           <div className="container">
             <Routes>
               <Route path="/" element={<ProductList />} />
@@ -114,6 +119,7 @@ class App extends Component {
 
 const mapState = state => {
   return {
+    overlayStatus: overlayStatusSelector(state),
     categories: categoriesSelector(state),
     currencies: currenciesListSelector(state),
     currentCategory: currentCategorySelector(state),
@@ -128,6 +134,7 @@ const mapDispatch = {
   getProductsByCategory,
   changeCurrency,
   toggleCurrencyModalStatus,
+  toggleCartOverlayStatus,
 };
 
 export default connect(mapState, mapDispatch)(App);

@@ -2,6 +2,10 @@ export const cartItemsSelector = state => {
   return state.cart.items;
 };
 
+export const overlayStatusSelector = state => {
+  return state.cart.overlayStatus;
+};
+
 export const cartQuantitySelector = state => {
   return state.cart.items.reduce((acc, item) => {
     return acc + item.count;

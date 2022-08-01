@@ -15,7 +15,6 @@ import './cart.scss';
 class Cart extends Component {
   render() {
     const {
-      changeActiveAttribute,
       cartItems,
       cartQuantity,
       currentCurrency,
@@ -103,7 +102,7 @@ class Cart extends Component {
             Total: <span className="cart__total-item_bold">{`${symbol}${totalPrice}`}</span>
           </div>
         </div>
-        <button className="cart__order-btn btn">ORDER</button>
+        <button className="cart__order-btn btn btn_green">ORDER</button>
       </div>
     );
   }

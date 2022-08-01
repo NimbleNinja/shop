@@ -90,7 +90,7 @@ class ProductDescription extends Component {
           <button
             disabled={!inStock}
             onClick={() => addProduct(this.props.currentProduct)}
-            className="product-info__cart-btn btn"
+            className="product-info__cart-btn btn btn_green"
           >
             ADD TO CART
           </button>

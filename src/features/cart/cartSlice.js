@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   items: [],
+  overlayStatus: false,
 };
 
 const cartSlice = createSlice({
@@ -29,6 +30,12 @@ const cartSlice = createSlice({
           count: action.payload.count ? action.payload.count + 1 : 1,
         });
       }
+    },
+    setCartOverlayStatus: (state, action) => {
+      state.overlayStatus = action.payload;
+    },
+    toggleCartOverlayStatus: state => {
+      state.overlayStatus = !state.overlayStatus;
     },
     incrementCount: (state, action) => {
       const product = state.items.find(item => item.id === action.payload);
@@ -62,6 +69,13 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addProduct, incrementCount, decrementCount, setActiveAttribute } = cartSlice.actions;
+export const {
+  addProduct,
+  incrementCount,
+  decrementCount,
+  setActiveAttribute,
+  setCartOverlayStatus,
+  toggleCartOverlayStatus,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
