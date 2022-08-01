@@ -1,1 +1,1 @@
-# Shop project Scandiweb
+# Shop project Scandiweb by Oleg Zaporozhets
