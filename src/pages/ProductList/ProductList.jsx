@@ -12,8 +12,8 @@ import ProductItem from './ProductItem';
 
 class ProductList extends Component {
   componentDidMount() {
-    const { currentCategory } = this.props.params;
-    this.props.getProductsByCategory(currentCategory || 'all');
+    const { categoryName } = this.props.params;
+    this.props.getProductsByCategory(categoryName || 'all');
   }
 
   render() {
@@ -35,10 +35,6 @@ class ProductList extends Component {
                 product={product}
                 price={price}
                 addProduct={addProduct}
-                //id={id}
-                //name={name}
-                //inStock={inStock}
-                //imgSrc={gallery[0]}
               />
             );
           })}

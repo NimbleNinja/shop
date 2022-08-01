@@ -92,12 +92,10 @@ class App extends Component {
                   </div>
                 ) : null}
               </div>
-              {/*<Link to="./cart">*/}
               <div className="actions__cart" onClick={() => toggleCartOverlayStatus()}>
                 <img src={cartIcon} alt="cart" className="actions__cart-icon" />
                 <div className="actions__cart-counter">{cartQuantity}</div>
               </div>
-              {/*</Link>*/}
             </div>
           </div>
         </header>

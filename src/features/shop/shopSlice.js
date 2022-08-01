@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchProductsByCategory, initFetch } from './shop.gateway';
 
-export const getCategories = createAsyncThunk('categories/getCategories', async () => {
+export const getCategories = createAsyncThunk('shop/getCategories', async () => {
   const response = await initFetch();
   return response;
 });
 
 export const getProductsByCategory = createAsyncThunk(
-  'categories/getProductsByCategory',
+  'shop/getProductsByCategory',
   async category => {
     const response = await fetchProductsByCategory(category);
     return response;
@@ -28,7 +28,7 @@ const initialState = {
 };
 
 const shopSlice = createSlice({
-  name: 'categories',
+  name: 'shop',
   initialState,
   reducers: {
     changeCurrency: (state, action) => {

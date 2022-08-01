@@ -13,7 +13,7 @@ export const cartQuantitySelector = state => {
 };
 
 export const totalOfCartSelector = state => {
-  const { currency } = state.categories;
+  const { currency } = state.shop;
 
   return state.cart.items.reduce((acc, item) => {
     const currentPrice = item.prices.find(price => {

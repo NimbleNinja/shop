@@ -1,23 +1,23 @@
 export const categoriesSelector = state => {
-  return state.categories.categoriesList;
+  return state.shop.categoriesList;
 };
 
 export const currenciesListSelector = state => {
-  return state.categories.currenciesList;
+  return state.shop.currenciesList;
 };
 
 export const currencyModalStatusSelector = state => {
-  return state.categories.currencyModalStatus;
+  return state.shop.currencyModalStatus;
 };
 
 export const categoryProductsSelector = state => {
-  return state.categories.categoryProducts;
+  return state.shop.categoryProducts;
 };
 
 export const generalCurrencySelector = state => {
-  return state.categories.currency;
+  return state.shop.currency;
 };
 
 export const currentCategorySelector = state => {
-  return state.categories.currentCategory;
+  return state.shop.currentCategory;
 };
