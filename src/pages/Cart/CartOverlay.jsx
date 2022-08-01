@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import './cart-overlay.scss';
 import { connect } from 'react-redux';
-import { cartItemsSelector } from '../../features/cart/cart.selectors';
+import {
+  cartItemsSelector,
+  cartQuantitySelector,
+  totalOfCartSelector,
+} from '../../features/cart/cart.selectors';
 import { generalCurrencySelector } from '../../features/shop/shop.selectors';
-import { setActiveAttribute, setCartOverlayStatus } from '../../features/cart/cartSlice';
+import {
+  decrementCount,
+  incrementCount,
+  setActiveAttribute,
+  setCartOverlayStatus,
+} from '../../features/cart/cartSlice';
 import { withNavigate } from '../../hocs/withNavigate';
 
 class CartOverlay extends Component {
@@ -14,14 +23,26 @@ class CartOverlay extends Component {
   };
 
   render() {
-    const { items, currentCurrency, setActiveAttribute } = this.props;
+    const {
+      items,
+      currentCurrency,
+      setActiveAttribute,
+      incrementCount,
+      decrementCount,
+      cartQuantity,
+      total,
+    } = this.props;
+
+    const { symbol } = currentCurrency;
+    const tax = (total * 0.21).toFixed(2);
+    const totalPrice = (total * 0.21 + total).toFixed(2);
 
     return (
       <div className="cart-overlay">
         <div className="cart-overlay__container container">
           <div className="cart-overlay__modal modal">
             <div className="modal__title">
-              <span className="modal__title_fw700">My Bag</span>, 3 items
+              <span className="modal__title_fw700">My Bag</span>, {cartQuantity} items
             </div>
             <ul className="modal__items">
               {items.map(({ id, count, brand, name, gallery, prices, attributes }) => {
@@ -111,9 +132,15 @@ class CartOverlay extends Component {
                     </div>
 
                     <div className="modal-item__counter item-counter">
-                      <div className="item-counter__btn item-counter__btn-increment" />
+                      <button
+                        onClick={() => incrementCount(id)}
+                        className="item-counter__btn item-counter__btn-increment"
+                      />
                       <div className="item-counter__value">{count}</div>
-                      <div className="item-counter__btn item-counter__btn-decrement" />
+                      <button
+                        onClick={() => decrementCount(id)}
+                        className="item-counter__btn item-counter__btn-decrement"
+                      />
                     </div>
 
                     <div className="modal-item__image">
@@ -125,7 +152,7 @@ class CartOverlay extends Component {
             </ul>
             <div className="modal__total">
               <span className="modal__total-text">Total</span>
-              <span className="modal__total-amount">$200.00</span>
+              <span className="modal__total-amount">{`${symbol}${totalPrice}`}</span>
             </div>
             <div className="modal__buttons">
               <button
@@ -147,12 +174,16 @@ const mapState = state => {
   return {
     items: cartItemsSelector(state),
     currentCurrency: generalCurrencySelector(state),
+    cartQuantity: cartQuantitySelector(state),
+    total: totalOfCartSelector(state),
   };
 };
 
 const mapProps = {
   setCartOverlayStatus,
   setActiveAttribute,
+  incrementCount,
+  decrementCount,
 };
 
 export default connect(mapState, mapProps)(withNavigate(CartOverlay));
